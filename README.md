@@ -15,3 +15,15 @@
             'enableVerifySSL' => true
         ]
 ```
+## tos预签名
+```php
+$filesystemFactory = make(\Hyperf\Filesystem\FilesystemFactory::class);
+$tos = $filesystemFactory->getAdapter('tos');
+
+$preSign = $tos->preSignedURL($path, new \League\Flysystem\Config([
+'httpMethod' => \Tos\Model\Enum::HttpMethodPut,
+'expires' => 3600
+]));
+
+var_dump($preSign);
+```
