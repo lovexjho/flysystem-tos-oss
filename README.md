@@ -27,3 +27,5 @@ $preSign = $tos->preSignedURL($path, new \League\Flysystem\Config([
 
 var_dump($preSign);
 ```
+
+> 引用项目地址： [jiangwang/flysystem-tos](https://packagist.org/packages/jiangwang/flysystem-tos)
