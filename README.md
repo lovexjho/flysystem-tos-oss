@@ -1,5 +1,17 @@
-# component-creator
+# hyperf文件系统添加火山引擎对象存储支持
 
-```
-composer create-project hyperf/component-creator
+`config\file.php`中，添加`tos`配置
+```php
+'tos' => [
+            'driver' => TosAdapterFactory::class,
+            'region' => env('TOS_REGION'),
+            'bucket' => env('TOS_BUCKET'),
+            'endpoint' => env('TOS_ENDPOINT'),
+            'ak' => env('AK'),
+            'sk' => env('SK'),
+            'securityToken' => env('SECURITY_TOKEN'),
+            'connectionTimeout' => 10000, // 毫秒
+            'socketTimeout' => 30000, // 毫秒,
+            'enableVerifySSL' => true
+        ]
 ```
