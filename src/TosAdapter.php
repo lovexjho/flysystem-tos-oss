@@ -18,6 +18,7 @@ use Tos\Model\PreSignedURLInput;
 use Tos\Model\PutObjectACLInput;
 use Tos\Model\PutObjectInput;
 use Tos\TosClient;
+use Tos\Exception\TosServerException;
 
 class TosAdapter implements FilesystemAdapter
 {
@@ -38,7 +39,11 @@ class TosAdapter implements FilesystemAdapter
 
     public function fileExists(string $path): bool
     {
-        return $this->getMetadata($path) !== false;
+        try {
+            return $this->getMetadata($path) !== false;
+        }catch (TosServerException $e) {
+            return false;
+        }
     }
 
     protected function getMetadata($path): bool|FileAttributes
