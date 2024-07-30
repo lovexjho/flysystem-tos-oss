@@ -86,7 +86,11 @@ class TosAdapter implements FilesystemAdapter
             $input->setHttpMethod($httpMethod);
         }
 
-        $input->setBucket($this->bucket);
+        if ($domain = $config->get('cname')) {
+            $input->setAlternativeEndpoint($domain);
+        } else {
+            $input->setBucket($this->bucket);
+        }
 
         $input->setKey($path);
 
