@@ -130,13 +130,12 @@ class TosAdapter implements FilesystemAdapter
 
     public function write(string $path, string $contents, Config $config): void
     {
-        $objectInput = new PutObjectInput($this->bucket, $path, $contents);
+        $objectInput = $this->getObjectInputOption($config);
+
+        $objectInput->setContent($contents);
 
         $this->getTosClient()->putObject($objectInput);
 
-        if ($visibility = $config->get('visibility')) {
-            $this->setVisibility($path, $visibility);
-        }
     }
 
     public function setVisibility(string $path, string $visibility): void
@@ -158,13 +157,12 @@ class TosAdapter implements FilesystemAdapter
 
     public function writeStream(string $path, $contents, Config $config): void
     {
-        $objectInput = new PutObjectInput($this->bucket, $path, $contents);
+
+        $objectInput = $this->getObjectInputOption($config);
+
+        $objectInput->setContent($contents);
 
         $this->getTosClient()->putObject($objectInput);
-
-        if ($visibility = $config->get('visibility')) {
-            $this->setVisibility($path, $visibility);
-        }
     }
 
     public function deleteDirectory(string $path): void
@@ -244,5 +242,40 @@ class TosAdapter implements FilesystemAdapter
         $objectInput = new DeleteObjectInput($this->bucket, $path);
 
         $this->getTosClient()->deleteObject($objectInput);
+    }
+
+    private function getObjectInputOption(Config $config)
+    {
+        $objectInput = new PutObjectInput($this->bucket);
+
+        if ($cache = $config->get('Cache-Control')) {
+            $objectInput->setCacheControl($cache);
+        }
+
+        if ($acl = $config->get('tos-acl')) {
+            $objectInput->setACL($acl);
+        }
+
+        if ($meta = $config->get('meta')) {
+            $objectInput->setMeta($meta);
+        }
+
+        if ($storageClass = $config->get('StorageClass')) {
+            $objectInput->setStorageClass($storageClass);
+        }
+        
+        if ($contentMD5 = $config->get('contentMD5')) {
+            $objectInput->setContentMD5($contentMD5);
+        }
+        
+        if ($contentDisposition = $config->get('contentDisposition')) {
+            $objectInput->setContentDisposition($contentDisposition);
+        }
+        
+        if ($expires = $config->get('expires')) {
+            $objectInput->setExpires($expires);
+        }
+
+        return $objectInput;
     }
 }
