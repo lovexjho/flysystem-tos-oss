@@ -131,7 +131,7 @@ class TosAdapter implements FilesystemAdapter
     public function write(string $path, string $contents, Config $config): void
     {
         $objectInput = $this->getObjectInputOption($config);
-
+        $objectInput->setKey($path);
         $objectInput->setContent($contents);
 
         $this->getTosClient()->putObject($objectInput);
@@ -161,6 +161,8 @@ class TosAdapter implements FilesystemAdapter
         $objectInput = $this->getObjectInputOption($config);
 
         $objectInput->setContent($contents);
+        $objectInput->setKey($path);
+
 
         $this->getTosClient()->putObject($objectInput);
     }
